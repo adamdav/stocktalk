@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script>
+      'use strict';
+
+      const render = (args = {}) => {
+        const {
+          search = '',
+          results = []
+        } = args
+
+        return ReactDOM.render(
+          React.createElement(
+            React.Fragment,
+            null,
+            React.createElement(
+              'input',
+              {className: '', id: 'search', type: 'text', name: 'search', placeholder: 'Symbol', value: search, onChange: event => render({ search: event.target.value, results })}
+            ),
+            React.createElement(
+              'ul',
+              {className: ''},
+              ...results
+            ),
+          ),
+          document.querySelector('#root')
+        )
+      }
+
+      render()
+    </script>
+  </body>
+</html>
