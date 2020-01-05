@@ -12,24 +12,81 @@
     <script>
       'use strict';
 
+      // const state = {}
+
       const render = (args = {}) => {
         const {
-          search = '',
-          results = []
+          query = '',
+          messages = []
         } = args
+
+        // console.log(messages)
 
         return ReactDOM.render(
           React.createElement(
             React.Fragment,
             null,
             React.createElement(
-              'input',
-              {className: '', id: 'search', type: 'text', name: 'search', placeholder: 'Symbol', value: search, onChange: event => render({ search: event.target.value, results })}
+              'form',
+              {
+                onSubmit: async (event) => {
+                  event.preventDefault()
+
+                  const queries = query.split(', ')
+                  const messagesUrl = `https://v61drjipwi.execute-api.us-east-1.amazonaws.com/dev/messages?${queries.map(q => `q=${encodeURIComponent(q)}`).join('&')}`
+                  // console.log(messagesUrl)
+                  try {
+                    const { messages } = await (await fetch(messagesUrl)).json()
+                    // console.log(messages)
+
+                    render({ ...args, messages })
+                  } catch (error) {
+                    console.error(error)
+                  }
+                  
+
+                  // const messages = (await Promise.all(
+                  //   query
+                  //     .split(', ')
+                  //     .map(async q => {
+                  //       try {
+                  //         const { messages } = await fetch(`https://api.stocktwits.com/api/2/search/symbols.json?q=${encodeURIComponent(q)}`)
+                  //         return messages
+                  //       } catch (error) {
+                  //         console.error(error)
+                  //         return []
+                  //       }
+                  //     })
+                  //   )
+                  // )
+                  // .reduce((a, b) => [...a, ...b], [])
+
+                  // render({ ...args, messages })
+
+                  // try {
+                  //   const response = await fetch(`https://api.stocktwits.com/api/2/search/symbols.json?q=${encodeURIComponent(query)}`)
+                  // } catch (error) {
+
+                  // }
+                }
+              },
+              React.createElement(
+                'input',
+                {
+                  className: '',
+                  id: 'search',
+                  type: 'text',
+                  name: 'search',
+                  placeholder: 'Symbol',
+                  value: query,
+                  onChange: event => render({ ...args, query: event.target.value })
+                }
+              ),
             ),
             React.createElement(
               'ul',
-              {className: ''},
-              ...results
+              { className: '' },
+              messages.map(message => React.createElement('li', { key: message.id }, JSON.stringify(message)))
             ),
           ),
           document.querySelector('#root')
