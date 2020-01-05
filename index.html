@@ -13,7 +13,7 @@
     <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
     <script>
-      'use strict';
+      let interval
 
       const render = (args = {}) => {
         const {
@@ -37,16 +37,45 @@
                   onSubmit: async (event) => {
                     event.preventDefault()
 
+                    if (interval) {
+                      clearInterval(interval)
+                      interval = undefined
+                    }
+
                     const queries = query.split(', ')
                     const messagesUrl = `https://v61drjipwi.execute-api.us-east-1.amazonaws.com/dev/messages?${queries.map(q => `q=${encodeURIComponent(q)}`).join('&')}`
 
                     try {
-                      const { messages } = await (await fetch(messagesUrl)).json()
+                      const response = await (await fetch(messagesUrl)).json()
 
-                      render({ ...args, messages })
+                      const sortedMessages = response.messages
+                        .slice()
+                        .sort((message1, message2) => new Date(message2.created_at) - new Date(message1.created_at))
+
+                      render({ ...args, messages: sortedMessages })
                     } catch (error) {
                       console.error(error)
                     }
+
+                    interval = setInterval(
+                      async () => {
+                        try {
+                          const response = await (await fetch(messagesUrl)).json()
+
+                          const sortedMessages = response.messages
+                            .slice()
+                            .sort((message1, message2) => new Date(message2.created_at) - new Date(message1.created_at))
+                          
+                          render({ ...args, messages: sortedMessages })
+                          // if (sortedMessages.first.id !== messages.first.id) {
+                            
+                          // }
+                        } catch (error) {
+                          console.error(error)
+                        }
+                      },
+                      20000
+                    )
                   }
                 },
                 React.createElement(
@@ -67,17 +96,10 @@
                 ),
               )
             ),
-            // React.createElement(
-            //   'main',
-            //   {
-            //     className: 'mt-20 p-4'
-            //   },
               React.createElement(
                 'ul',
                 { className: 'mt-20 p-4' },
                 messages
-                  .slice()
-                  .sort((message1, message2) => new Date(message2.created_at) - new Date(message1.created_at))
                   .map(message => {
                     console.log(message)
                     return React.createElement(
