@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html class="bg-gray-200">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stocktalk</title>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
   </head>
   <body>
-    <div id="root"></div>
+    <div class="text-gray-700 h-screen" id="root"></div>
 
     <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
@@ -22,71 +24,115 @@
 
         // console.log(messages)
 
+        // return ReactDOM.render(
+        //   fragment(
+        //     // header(),
+        //     form(
+        //       {},
+        //       input({
+        //         className: '',
+        //         id: 'search',
+        //         type: 'text',
+        //         name: 'search',
+        //         placeholder: 'Symbol',
+        //         value: query,
+        //         onChange: event => render({ ...args, query: event.target.value })
+        //       })
+        //     ),
+        //     // footer()
+        //   ),
+        //   document.querySelector('#root')
+        // )
+        
         return ReactDOM.render(
           React.createElement(
             React.Fragment,
             null,
             React.createElement(
-              'form',
+              'header',
               {
-                onSubmit: async (event) => {
-                  event.preventDefault()
-
-                  const queries = query.split(', ')
-                  const messagesUrl = `https://v61drjipwi.execute-api.us-east-1.amazonaws.com/dev/messages?${queries.map(q => `q=${encodeURIComponent(q)}`).join('&')}`
-                  // console.log(messagesUrl)
-                  try {
-                    const { messages } = await (await fetch(messagesUrl)).json()
-                    // console.log(messages)
-
-                    render({ ...args, messages })
-                  } catch (error) {
-                    console.error(error)
-                  }
-                  
-
-                  // const messages = (await Promise.all(
-                  //   query
-                  //     .split(', ')
-                  //     .map(async q => {
-                  //       try {
-                  //         const { messages } = await fetch(`https://api.stocktwits.com/api/2/search/symbols.json?q=${encodeURIComponent(q)}`)
-                  //         return messages
-                  //       } catch (error) {
-                  //         console.error(error)
-                  //         return []
-                  //       }
-                  //     })
-                  //   )
-                  // )
-                  // .reduce((a, b) => [...a, ...b], [])
-
-                  // render({ ...args, messages })
-
-                  // try {
-                  //   const response = await fetch(`https://api.stocktwits.com/api/2/search/symbols.json?q=${encodeURIComponent(query)}`)
-                  // } catch (error) {
-
-                  // }
-                }
+                className: 'bg-white p-4 shadow-lg fixed left-0 top-0 right-0 opacity-100'
               },
               React.createElement(
-                'input',
+                'form',
                 {
                   className: '',
-                  id: 'search',
-                  type: 'text',
-                  name: 'search',
-                  placeholder: 'Symbol',
-                  value: query,
-                  onChange: event => render({ ...args, query: event.target.value })
-                }
-              ),
+                  onSubmit: async (event) => {
+                    event.preventDefault()
+
+                    const queries = query.split(', ')
+                    const messagesUrl = `https://v61drjipwi.execute-api.us-east-1.amazonaws.com/dev/messages?${queries.map(q => `q=${encodeURIComponent(q)}`).join('&')}`
+                    // console.log(messagesUrl)
+                    try {
+                      const { messages } = await (await fetch(messagesUrl)).json()
+                      // console.log(messages)
+
+                      render({ ...args, messages })
+                    } catch (error) {
+                      console.error(error)
+                    }
+                  }
+                },
+                React.createElement(
+                  'input',
+                  {
+                    className: 'bg-gray-200 shadow-inner w-full px-4 py-2 outline-none rounded-lg',
+                    id: 'search',
+                    type: 'text',
+                    name: 'search',
+                    placeholder: 'Search stocks and cryptos',
+                    value: query,
+                    onChange: event => render({ ...args, query: event.target.value })
+                  }
+                ),
+              )
             ),
             React.createElement(
-              'ul',
-              { className: '' },
-              messages.map(message => React.createElement('li', { key: message.id }, JSON.stringify(message)))
+              'main',
+              {
+                className: 'mt-20 p-4'
+              },
+              React.createElement(
+                'ul',
+                { className: '' },
+                messages.map(message => {
+                  console.log(message)
+                  return React.createElement(
+                    'li',
+                    {
+                      key: message.id,
+                      className: 'shadow bg-white rounded-lg p-4 mb-6 flex flex-col'
+                    },
+                    React.createElement(
+                      'blockquote',
+                      { className: 'mb-2 break-words' },
+                      message.body
+                    ),
+                    React.createElement(
+                      'span',
+                      { className: 'inline-flex items-center' },
+                      // React.createElement(
+                      //   'a',
+                      //   {
+                      //     className: 'flex items-center'
+                      //   },
+                      React.createElement(
+                        'img',
+                        { className: 'shadow rounded-full h-8 w-8', src: message.user.avatar_url }
+                      ),
+                      React.createElement(
+                        'b',
+                        {
+                          className: 'mx-1'
+                        },
+                        message.user.username
+                      ),
+                      // ),
+                      `at ${message.created_at}`
+                    ),
+                  )
+                })
+              )
             ),
           ),
           document.querySelector('#root')
