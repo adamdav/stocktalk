@@ -75,43 +75,61 @@
               React.createElement(
                 'ul',
                 { className: 'mt-20 p-4' },
-                messages.map(message => {
-                  console.log(message)
-                  return React.createElement(
-                    'li',
-                    {
-                      key: message.id,
-                      className: 'shadow bg-white rounded-lg p-4 mb-6 flex flex-col relative z-10'
-                    },
-                    React.createElement(
-                      'span',
-                      { className: 'inline-flex items-center mb-2' },
+                messages
+                  .slice()
+                  .sort((message1, message2) => new Date(message2.created_at) - new Date(message1.created_at))
+                  .map(message => {
+                    console.log(message)
+                    return React.createElement(
+                      'li',
+                      {
+                        key: message.id,
+                        className: 'shadow bg-white rounded-lg p-4 mb-6 flex flex-col relative z-10'
+                      },
                       React.createElement(
-                        'img',
-                        { className: 'shadow rounded-full h-8 w-8', src: message.user.avatar_url }
+                        'span',
+                        { className: 'inline-flex items-center mb-2' },
+                        React.createElement(
+                          'img',
+                          { className: 'shadow rounded-full h-8 w-8', src: message.user.avatar_url }
+                        ),
+                        React.createElement(
+                          'b',
+                          {
+                            className: 'mx-1'
+                          },
+                          message.user.username
+                        ),
                       ),
                       React.createElement(
-                        'b',
-                        {
-                          className: 'mx-1'
-                        },
-                        message.user.username
+                        'blockquote',
+                        { className: 'mb-2 break-words' },
+                        message.body
                       ),
-                    ),
-                    React.createElement(
-                      'blockquote',
-                      { className: 'mb-2 break-words' },
-                      message.body
-                    ),
-                    message.created_at
-                  )
-                })
+                      message.created_at
+                    )
+                  })
               ),
             // ),
             React.createElement(
               'footer',
-              {className: 'fixed left-0 right-0 bottom-0 mb-2 text-center text-gray-500 z-0'},
-              "Powered by Stocktwits"
+              {className: 'fixed left-0 right-0 bottom-0 mb-2 text-gray-500 z-0 flex justify-center items-baseline'},
+              "Powered by",
+              React.createElement(
+                'a',
+                {
+                  className: 'ml-2',
+                  href: 'https://stocktwits.com/'
+                },
+                React.createElement(
+                  'img',
+                  {
+                    className: 'h-4',
+                    src: 'stocktwits.svg',
+                    alt: 'Stocktwits'
+                  }
+                )
+              )
             )
           ),
           document.querySelector('#root')
