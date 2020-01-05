@@ -5,44 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Stocktalk</title>
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/c7e73f1305.js" crossorigin="anonymous"></script>
   </head>
   <body>
-    <div class="text-gray-700 h-screen" id="root"></div>
+    <div class="text-gray-700 h-screen flex flex-col justify-between" id="root"></div>
 
     <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
     <script>
       'use strict';
 
-      // const state = {}
-
       const render = (args = {}) => {
         const {
           query = '',
           messages = []
         } = args
-
-        // console.log(messages)
-
-        // return ReactDOM.render(
-        //   fragment(
-        //     // header(),
-        //     form(
-        //       {},
-        //       input({
-        //         className: '',
-        //         id: 'search',
-        //         type: 'text',
-        //         name: 'search',
-        //         placeholder: 'Symbol',
-        //         value: query,
-        //         onChange: event => render({ ...args, query: event.target.value })
-        //       })
-        //     ),
-        //     // footer()
-        //   ),
-        //   document.querySelector('#root')
-        // )
         
         return ReactDOM.render(
           React.createElement(
@@ -51,21 +28,20 @@
             React.createElement(
               'header',
               {
-                className: 'bg-white p-4 shadow-lg fixed left-0 top-0 right-0 opacity-100'
+                className: 'bg-white p-4 shadow-lg fixed left-0 top-0 right-0 opacity-100 z-20'
               },
               React.createElement(
                 'form',
                 {
-                  className: '',
+                  className: 'relative',
                   onSubmit: async (event) => {
                     event.preventDefault()
 
                     const queries = query.split(', ')
                     const messagesUrl = `https://v61drjipwi.execute-api.us-east-1.amazonaws.com/dev/messages?${queries.map(q => `q=${encodeURIComponent(q)}`).join('&')}`
-                    // console.log(messagesUrl)
+
                     try {
                       const { messages } = await (await fetch(messagesUrl)).json()
-                      // console.log(messages)
 
                       render({ ...args, messages })
                     } catch (error) {
@@ -74,9 +50,13 @@
                   }
                 },
                 React.createElement(
+                  'i',
+                  { className: 'fas fa-search absolute mt-3 ml-4' }
+                ),
+                React.createElement(
                   'input',
                   {
-                    className: 'bg-gray-200 shadow-inner w-full px-4 py-2 outline-none rounded-lg',
+                    className: 'bg-gray-200 shadow-inner w-full pl-10 pr-4 py-2 outline-none rounded-lg',
                     id: 'search',
                     type: 'text',
                     name: 'search',
@@ -87,35 +67,25 @@
                 ),
               )
             ),
-            React.createElement(
-              'main',
-              {
-                className: 'mt-20 p-4'
-              },
+            // React.createElement(
+            //   'main',
+            //   {
+            //     className: 'mt-20 p-4'
+            //   },
               React.createElement(
                 'ul',
-                { className: '' },
+                { className: 'mt-20 p-4' },
                 messages.map(message => {
                   console.log(message)
                   return React.createElement(
                     'li',
                     {
                       key: message.id,
-                      className: 'shadow bg-white rounded-lg p-4 mb-6 flex flex-col'
+                      className: 'shadow bg-white rounded-lg p-4 mb-6 flex flex-col relative z-10'
                     },
                     React.createElement(
-                      'blockquote',
-                      { className: 'mb-2 break-words' },
-                      message.body
-                    ),
-                    React.createElement(
                       'span',
-                      { className: 'inline-flex items-center' },
-                      // React.createElement(
-                      //   'a',
-                      //   {
-                      //     className: 'flex items-center'
-                      //   },
+                      { className: 'inline-flex items-center mb-2' },
                       React.createElement(
                         'img',
                         { className: 'shadow rounded-full h-8 w-8', src: message.user.avatar_url }
@@ -127,13 +97,22 @@
                         },
                         message.user.username
                       ),
-                      // ),
-                      `at ${message.created_at}`
                     ),
+                    React.createElement(
+                      'blockquote',
+                      { className: 'mb-2 break-words' },
+                      message.body
+                    ),
+                    message.created_at
                   )
                 })
-              )
-            ),
+              ),
+            // ),
+            React.createElement(
+              'footer',
+              {className: 'fixed left-0 right-0 bottom-0 mb-2 text-center text-gray-500 z-0'},
+              "Powered by Stocktwits"
+            )
           ),
           document.querySelector('#root')
         )
