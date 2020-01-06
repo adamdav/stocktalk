@@ -6,12 +6,26 @@
     <title>Stocktalk</title>
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/c7e73f1305.js" crossorigin="anonymous"></script>
+    <style>
+      .grayscale {
+        -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+        filter: grayscale(100%);
+      }
+
+      .rounded-xl {
+        border-radius: 1.5rem;
+      }
+    </style>
   </head>
   <body>
     <div class="text-gray-700 h-screen flex flex-col justify-between" id="root"></div>
 
-    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <!-- <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script> -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/redux@4.0.5/dist/redux.min.js"></script>
+    <!-- <script crossorigin src="https://unpkg.com/react-redux@5.0.6/dist/react-redux.min.js"></script> -->
     <script>
       let interval
 
@@ -28,12 +42,25 @@
             React.createElement(
               'header',
               {
-                className: 'bg-white p-4 shadow-lg fixed left-0 top-0 right-0 opacity-100 z-20'
+                className: 'bg-white p-4 shadow-lg fixed left-0 top-0 right-0 opacity-100 z-20 flex items-center'
               },
+              React.createElement(
+                'a',
+                { className: 'inline-flex items-center' },
+                React.createElement(
+                  'i',
+                  { className: 'fas fa-comment-dollar fa-3x text-blue-500' }
+                ),
+                React.createElement(
+                  'span',
+                  { className: 'text-3xl ml-1 hidden sm:block' },
+                  'stocktalk'
+                ),
+              ),
               React.createElement(
                 'form',
                 {
-                  className: 'relative',
+                  className: 'relative w-full ml-4',
                   onSubmit: async (event) => {
                     event.preventDefault()
 
@@ -85,7 +112,7 @@
                 React.createElement(
                   'input',
                   {
-                    className: 'bg-gray-200 shadow-inner w-full pl-10 pr-4 py-2 outline-none rounded-lg',
+                    className: 'bg-gray-200 shadow-inner w-full pl-10 pr-4 py-2 outline-none rounded-xl',
                     id: 'search',
                     type: 'text',
                     name: 'search',
@@ -106,7 +133,7 @@
                       'li',
                       {
                         key: message.id,
-                        className: 'shadow bg-white rounded-lg p-4 mb-6 flex flex-col relative z-10'
+                        className: 'shadow bg-white rounded-xl p-4 mb-6 flex flex-col relative z-10'
                       },
                       React.createElement(
                         'span',
@@ -146,7 +173,7 @@
                 React.createElement(
                   'img',
                   {
-                    className: 'h-5',
+                    className: 'h-5 grayscale',
                     src: 'stocktwits.svg',
                     alt: 'Stocktwits'
                   }
@@ -159,6 +186,21 @@
       }
 
       render()
+
+      // const store = Redux.createStore((state = {}, action) => ({ ...state, ...action }))
+
+      // store.subscribe(() => render(store.getState()))
+
+      // store.subscribe(() => {
+      //   const { isFetching } = store.getState()
+
+      //   if (isFetching) 
+      // })
+
+      // store.dispatch({ isFetching: true })
+      // let interval
+
+
     </script>
   </body>
 </html>
