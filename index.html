@@ -42,7 +42,7 @@
             React.createElement(
               'header',
               {
-                className: 'bg-white p-4 shadow-lg fixed left-0 top-0 right-0 opacity-100 z-20 flex items-center'
+                className: 'bg-white p-4 shadow fixed left-0 top-0 right-0 opacity-100 z-10 flex items-center'
               },
               React.createElement(
                 'a',
@@ -123,9 +123,12 @@
                 ),
               )
             ),
+            React.createElement(
+              'main',
+              { className: 'px-4' },
               React.createElement(
                 'ul',
-                { className: 'mt-20 pt-4 px-4 pb-8' },
+                { className: 'mt-24' },
                 messages
                   .map(message => {
                     console.log(message)
@@ -133,14 +136,14 @@
                       'li',
                       {
                         key: message.id,
-                        className: 'shadow bg-white rounded-xl p-4 mb-6 flex flex-col relative z-10'
+                        className: 'bg-white rounded-xl p-4 mb-6 flex flex-col relative z-0'
                       },
                       React.createElement(
                         'span',
                         { className: 'inline-flex items-center mb-2' },
                         React.createElement(
                           'img',
-                          { className: 'shadow rounded-full h-8 w-8', src: message.user.avatar_url }
+                          { className: 'rounded-full h-8 w-8', src: message.user.avatar_url }
                         ),
                         React.createElement(
                           'b',
@@ -159,10 +162,12 @@
                     )
                   })
               ),
+            ),
+              
             // ),
             React.createElement(
               'footer',
-              {className: 'fixed left-0 right-0 bottom-0 mb-2 text-gray-500 z-0 flex justify-center items-baseline'},
+              {className: 'text-gray-500 p-4 flex justify-center items-baseline'},
               "Powered by",
               React.createElement(
                 'a',
