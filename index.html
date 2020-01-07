@@ -42,7 +42,7 @@
             React.createElement(
               'header',
               {
-                className: 'bg-white p-4 shadow fixed left-0 top-0 right-0 opacity-100 z-10 flex items-center'
+                className: 'bg-white p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-10 flex items-center'
               },
               React.createElement(
                 'a',
@@ -143,8 +143,21 @@
                         { className: 'inline-flex items-center mb-2' },
                         React.createElement(
                           'img',
-                          { className: 'rounded-full h-8 w-8', src: message.user.avatar_url }
+                          { className: 'shadow rounded-full h-12 w-12', src: message.user.avatar_url }
                         ),
+                        // React.createElement(
+                        //   'span',
+                        //   { className: 'image-container h-12 w-12 relative' },
+                        //   React.createElement(
+                        //     'img',
+                        //     { className: 'rounded-full h-full w-full', src: message.user.avatar_url }
+                        //   ),
+                        //   React.createElement(
+                        //     'span',
+                        //     { className: 'absolute top-0 h-full w-full shadow-inner rounded-full', src: message.user.avatar_url }
+                        //   ),
+                        // ),
+                        
                         React.createElement(
                           'b',
                           {
