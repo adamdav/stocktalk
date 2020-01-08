@@ -68,6 +68,13 @@ functions:
           path: messages
           method: get
           cors: true
+  symbols:
+    handler: handler.symbols
+    events:
+      - http:
+          path: symbols
+          method: get
+          cors: true
 #      - websocket: $connect
 #      - s3: ${env:BUCKET}
 #      - schedule: rate(10 minutes)
