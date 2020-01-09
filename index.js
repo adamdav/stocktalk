@@ -101,10 +101,10 @@ function App() {
   return (
     div(
       { 
-        className: `text-gray-700 h-screen flex flex-col justify-between pt-24 ${isGettingResults ? 'skeleton' : ''}`,
+        className: `text-gray-700 h-auto flex flex-col justify-between pt-24 pb-12 ${isGettingResults ? 'skeleton' : ''}`,
         onClick: event => dispatch({ showSuggestions: false })
       },
-      header({ className: 'bg-white p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-10 flex items-center' },
+      header({ className: 'bg-white p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-20 flex items-center' },
         a({ className: 'inline-flex items-center' },
           i({ className: 'fas fa-comment-dollar fa-3x text-blue-500' }, null),
           span({ className: 'text-3xl ml-1 hidden sm:block' }, 'stocktalk'),
@@ -202,7 +202,7 @@ function App() {
       main({ className: 'px-4' },
         ul(null,
           results.map(({ id, user, body, created_at }) =>
-            li({ key: id, className: 'bg-white rounded-xl p-4 mb-6 flex flex-col relative z-0 shadow' },
+            li({ key: id, className: 'bg-white rounded-xl p-4 mb-6 flex flex-col relative z-10 shadow' },
               span({ className: 'inline-flex items-center mb-2' },
               // border-solid border border-gray-200
                 img({ className: ' rounded-full h-12 w-12', src: user.avatar_url }, null),
@@ -210,7 +210,7 @@ function App() {
               blockquote({ className: 'mb-2 break-words' }, body),
               created_at)))
       ),
-      footer({ className: 'text-gray-500 p-4 flex justify-center items-baseline' },
+      footer({ className: 'text-gray-500 p-4 fixed bottom-0 z-0 w-full flex justify-center items-baseline' },
         "Powered by",
         a({ className: 'ml-2', href: 'https://stocktwits.com/' },
           img({ className: 'h-5 grayscale', src: stocktwits, alt: 'Stocktwits' }, null))
