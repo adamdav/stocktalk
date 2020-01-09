@@ -204,8 +204,7 @@ function App() {
           results.map(({ id, user, body, created_at }) =>
             li({ key: id, className: 'bg-white rounded-xl p-4 mb-6 flex flex-col relative z-10 shadow' },
               span({ className: 'inline-flex items-center mb-2' },
-              // border-solid border border-gray-200
-                img({ className: ' rounded-full h-12 w-12', src: user.avatar_url }, null),
+                img({ className: 'border-solid border border-gray-200 rounded-full h-12 w-12', src: user.avatar_url }, null),
                 b({ className: 'mx-1' }, user.username)),
               blockquote({ className: 'mb-2 break-words' }, body),
               created_at)))
