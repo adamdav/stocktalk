@@ -1,0 +1,36 @@
+{
+  "name": "stocktalk",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "adamdav <adamdvdsn@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-transform-runtime": "^7.7.6",
+    "@babel/preset-react": "^7.7.4",
+    "parcel-bundler": "^1.12.4"
+  },
+  "dependencies": {
+    "lodash.curry": "^4.1.1",
+    "lodash.throttle": "^4.1.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-react"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-transform-runtime",
+        {
+          "regenerator": true
+        }
+      ]
+    ]
+  }
+}

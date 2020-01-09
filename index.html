@@ -12,213 +12,43 @@
         filter: grayscale(100%);
       }
 
+      .skeleton {
+        position: relative;
+        overflow: hidden;
+        background-color: #e2e8f0;
+      }
+
+      .skeleton::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        transform: translateX(-100%);
+        background-image: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0) 0,
+          rgba(255, 255, 255, 0.2) 20%,
+          rgba(255, 255, 255, 0.5) 60%,
+          rgba(255, 255, 255, 0)
+        );
+        animation: shimmer 3s infinite;
+        content: '';
+      }
+
+      @keyframes shimmer {
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
       .rounded-xl {
         border-radius: 1.5rem;
       }
     </style>
   </head>
   <body>
-    <div class="text-gray-700 h-screen flex flex-col justify-between" id="root"></div>
-
-    <!-- <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script> -->
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/redux@4.0.5/dist/redux.min.js"></script>
-    <!-- <script crossorigin src="https://unpkg.com/react-redux@5.0.6/dist/react-redux.min.js"></script> -->
-    <script>
-      let interval
-
-      const render = (args = {}) => {
-        const {
-          query = '',
-          messages = []
-        } = args
-        
-        return ReactDOM.render(
-          React.createElement(
-            React.Fragment,
-            null,
-            React.createElement(
-              'header',
-              {
-                className: 'bg-white p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-10 flex items-center'
-              },
-              React.createElement(
-                'a',
-                { className: 'inline-flex items-center' },
-                React.createElement(
-                  'i',
-                  { className: 'fas fa-comment-dollar fa-3x text-blue-500' }
-                ),
-                React.createElement(
-                  'span',
-                  { className: 'text-3xl ml-1 hidden sm:block' },
-                  'stocktalk'
-                ),
-              ),
-              React.createElement(
-                'form',
-                {
-                  className: 'relative w-full ml-4',
-                  onSubmit: async (event) => {
-                    event.preventDefault()
-
-                    if (interval) {
-                      clearInterval(interval)
-                      interval = undefined
-                    }
-
-                    const queries = query.split(', ')
-                    const messagesUrl = `https://v61drjipwi.execute-api.us-east-1.amazonaws.com/dev/messages?${queries.map(q => `q=${encodeURIComponent(q)}`).join('&')}`
-
-                    try {
-                      const response = await (await fetch(messagesUrl)).json()
-
-                      const sortedMessages = response.messages
-                        .slice()
-                        .sort((message1, message2) => new Date(message2.created_at) - new Date(message1.created_at))
-
-                      render({ ...args, messages: sortedMessages })
-                    } catch (error) {
-                      console.error(error)
-                    }
-
-                    interval = setInterval(
-                      async () => {
-                        try {
-                          const response = await (await fetch(messagesUrl)).json()
-
-                          const sortedMessages = response.messages
-                            .slice()
-                            .sort((message1, message2) => new Date(message2.created_at) - new Date(message1.created_at))
-                          
-                          render({ ...args, messages: sortedMessages })
-                          // if (sortedMessages.first.id !== messages.first.id) {
-                            
-                          // }
-                        } catch (error) {
-                          console.error(error)
-                        }
-                      },
-                      20000
-                    )
-                  }
-                },
-                React.createElement(
-                  'i',
-                  { className: 'fas fa-search absolute mt-3 ml-4' }
-                ),
-                React.createElement(
-                  'input',
-                  {
-                    className: 'bg-gray-200 shadow-inner w-full pl-10 pr-4 py-2 outline-none rounded-xl',
-                    id: 'search',
-                    type: 'text',
-                    name: 'search',
-                    placeholder: 'Search stocks and cryptos',
-                    value: query,
-                    onChange: event => render({ ...args, query: event.target.value })
-                  }
-                ),
-              )
-            ),
-            React.createElement(
-              'main',
-              { className: 'px-4' },
-              React.createElement(
-                'ul',
-                { className: 'mt-24' },
-                messages
-                  .map(message => {
-                    console.log(message)
-                    return React.createElement(
-                      'li',
-                      {
-                        key: message.id,
-                        className: 'bg-white rounded-xl p-4 mb-6 flex flex-col relative z-0'
-                      },
-                      React.createElement(
-                        'span',
-                        { className: 'inline-flex items-center mb-2' },
-                        React.createElement(
-                          'img',
-                          { className: 'shadow rounded-full h-12 w-12', src: message.user.avatar_url }
-                        ),
-                        // React.createElement(
-                        //   'span',
-                        //   { className: 'image-container h-12 w-12 relative' },
-                        //   React.createElement(
-                        //     'img',
-                        //     { className: 'rounded-full h-full w-full', src: message.user.avatar_url }
-                        //   ),
-                        //   React.createElement(
-                        //     'span',
-                        //     { className: 'absolute top-0 h-full w-full shadow-inner rounded-full', src: message.user.avatar_url }
-                        //   ),
-                        // ),
-                        
-                        React.createElement(
-                          'b',
-                          {
-                            className: 'mx-1'
-                          },
-                          message.user.username
-                        ),
-                      ),
-                      React.createElement(
-                        'blockquote',
-                        { className: 'mb-2 break-words' },
-                        message.body
-                      ),
-                      message.created_at
-                    )
-                  })
-              ),
-            ),
-              
-            // ),
-            React.createElement(
-              'footer',
-              {className: 'text-gray-500 p-4 flex justify-center items-baseline'},
-              "Powered by",
-              React.createElement(
-                'a',
-                {
-                  className: 'ml-2',
-                  href: 'https://stocktwits.com/'
-                },
-                React.createElement(
-                  'img',
-                  {
-                    className: 'h-5 grayscale',
-                    src: 'stocktwits.svg',
-                    alt: 'Stocktwits'
-                  }
-                )
-              )
-            )
-          ),
-          document.querySelector('#root')
-        )
-      }
-
-      render()
-
-      // const store = Redux.createStore((state = {}, action) => ({ ...state, ...action }))
-
-      // store.subscribe(() => render(store.getState()))
-
-      // store.subscribe(() => {
-      //   const { isFetching } = store.getState()
-
-      //   if (isFetching) 
-      // })
-
-      // store.dispatch({ isFetching: true })
-      // let interval
-
-
-    </script>
+    <div id="root"></div>
+    <script src="./index.js"></script>
   </body>
 </html>
