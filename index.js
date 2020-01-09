@@ -63,7 +63,8 @@ function App() {
     let didCancel = false
 
     if (state.isGettingResults) {
-      const messagesUrl = `${BASE_URL}/messages?${state.queries.map(({ symbol }) => `q=${encodeURIComponent(symbol)}`).join('&')}`
+      console.log(state.queries)
+      const messagesUrl = `${BASE_URL}/messages?${state.queries.map(q => `q=${encodeURIComponent(q)}`).join('&')}`
 
       safeFetch(messagesUrl).then(({ messages }) => {
         if (didCancel) return
@@ -92,9 +93,9 @@ function App() {
     return () => {
       didCancel = true
     }
-  }, [state.isGettingResults, state.isGettingSuggestions])
+  }, [state])
 
-  console.log(state)
+  // console.log(state)
 
   const { isGettingResults = false, isGettingSuggestions = false, queryInput = '', queries = [], results = [], showSuggestions = false, suggestions = [], suggestionIndex = 0 } = state
 
@@ -104,30 +105,21 @@ function App() {
         className: `text-gray-700 h-auto flex flex-col justify-between pt-24 pb-12 ${isGettingResults ? 'skeleton' : ''}`,
         onClick: event => dispatch({ showSuggestions: false })
       },
-      header({ className: 'bg-white p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-20 flex items-center' },
-        a({ className: 'inline-flex items-center' },
-          i({ className: 'fas fa-comment-dollar fa-3x text-blue-500' }, null),
-          span({ className: 'text-3xl ml-1 hidden sm:block' }, 'stocktalk'),
-        ),
+      header({ className: 'bg-white p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-20 flex flex-col items-start' },
+        // a({ className: 'inline-flex items-center' },
+        //   i({ className: 'fas fa-comment-dollar fa-lg text-blue-500' }, null),
+        //   span({ className: 'text-lg ml-1' }, 'stocktalk'),
+        // ),
         form({
-          className: 'relative bg-gray-200 shadow-inner w-full ml-2 pl-10 pr-4 py-2 rounded-xl',
+          className: 'relative bg-gray-200 shadow-inner pl-10 pr-4 py-1 mb-2 rounded-xl w-full',
           onClick: event => event.stopPropagation(),
           onSubmit: event => {
             event.preventDefault()
-
-            dispatch({
-              queryInput: '',
-              queries: [...new Set([...queries, suggestions[suggestionIndex]])],
-              suggestionIndex: 0,
-              isGettingResults: true,
-              showSuggestions: false
-            })
           }
         },
-          i({ className: 'fas fa-search absolute left-0 top-0 mt-3 ml-4' }, null),
-          ...queries.map(({ symbol }) => symbol),
+          i({ className: 'fas fa-search fa-xs absolute left-0 top-0 mt-3 ml-4' }, null),
           input({
-            className: 'outline-none bg-transparent',
+            className: 'outline-none bg-transparent w-full',
             id: 'search',
             name: 'search',
             list: 'suggestions',
@@ -141,6 +133,14 @@ function App() {
                 case 'ArrowDown':
                   if (suggestionIndex < 4) dispatch({ suggestionIndex: suggestionIndex + 1 })
                   break
+                case 'Enter':
+                  dispatch({
+                    queryInput: '',
+                    queries: [...new Set([...queries, suggestions[suggestionIndex].symbol])],
+                    suggestionIndex: 0,
+                    isGettingResults: true,
+                    showSuggestions: false
+                  })
                 default:
                   return
               }
@@ -153,7 +153,7 @@ function App() {
             // },
             onChange: event => {
               dispatch({ queryInput: event.target.value, isGettingSuggestions: true })
-            }
+            },
           },
           null),
           ul({ id: 'suggestions', className: `absolute left-0 overflow-hidden rounded-xl shadow-lg bg-white w-full ${showSuggestions ? '' : 'hidden'}` },
@@ -181,13 +181,16 @@ function App() {
                   },
                   onClick: (event) => {
                     event.stopPropagation()
-                    dispatch({
+                    const data = {
                       queryInput: '',
-                      queries: [...new Set([...queries, suggestions[suggestionIndex]])],
+                      queries: [...new Set([...queries, suggestions[suggestionIndex].symbol])],
                       suggestionIndex: 0,
                       isGettingResults: true,
                       showSuggestions: false
-                    })
+                    }
+
+                    console.log(data)
+                    dispatch(data)
                   }
                 },
                   b(null, symbol),
@@ -196,8 +199,12 @@ function App() {
                 )
               )
             )
-          )
+          ),
         ),
+        ul(
+          { className: 'inline-flex' },
+          ...queries.map((q) => li({ key: q, className: 'px-2 py-1 mr-2 bg-blue-500 rounded-xl text-white' }, q)),
+        )
       ),
       main({ className: 'px-4' },
         ul(null,
