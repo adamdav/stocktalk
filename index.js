@@ -84,7 +84,7 @@ function App() {
         if (didCancel) return
         
         dispatch({
-          suggestions: symbols,
+          suggestions: symbols.filter(({ symbol }) => !state.queries.includes(symbol)),
           isGettingSuggestions: false
         })
       }) 
@@ -183,7 +183,7 @@ function App() {
                     event.stopPropagation()
                     const data = {
                       queryInput: '',
-                      queries: [...new Set([...queries, suggestions[suggestionIndex].symbol])],
+                      queries: [...new Set([...queries, symbol])],
                       suggestionIndex: 0,
                       isGettingResults: true,
                       showSuggestions: false
