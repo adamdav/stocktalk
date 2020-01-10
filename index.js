@@ -70,6 +70,11 @@ function App() {
     // let intervalId
 
     if (state.isGettingResults) {
+      if (state.queries.length === 0) {
+        dispatch({ results: [], isGettingResults: false })
+        return
+      }
+      
       const messagesUrl = `${BASE_URL}/messages?${state.queries.map(q => `q=${encodeURIComponent(q)}`).join('&')}`
 
       console.log("Fetching results")
@@ -247,7 +252,23 @@ function App() {
         ),
         ul(
           { className: 'inline-flex' },
-          ...queries.map((q) => li({ key: q, className: 'px-2 py-1 mr-2 bg-blue-500 rounded-xl text-white' }, q)),
+          ...queries.map((q) =>
+            li({
+              key: q,
+              className: 'px-2 py-1 mr-2 bg-blue-500 rounded-xl text-blue-200'
+            },
+            q,
+            button(
+              {
+                onClick: _ =>
+                  dispatch({
+                    queries: queries.filter(q2 => q2 !== q),
+                    isGettingResults: true
+                  })
+              },
+              i({ className: 'fas fa-times fa-sm p-1' }, null)
+            ))
+          ),
         )
       ),
       main({ className: 'px-4' },
