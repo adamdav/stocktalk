@@ -59,13 +59,20 @@ function App() {
     }
   )
 
+  // Run on first render only
+  // React.useEffect(() => {
+  //   console.log(state)
+
+  // }, [])
+
   React.useEffect(() => {
     let didCancel = false
+    // let intervalId
 
     if (state.isGettingResults) {
-      console.log(state.queries)
       const messagesUrl = `${BASE_URL}/messages?${state.queries.map(q => `q=${encodeURIComponent(q)}`).join('&')}`
 
+      console.log("Fetching results")
       safeFetch(messagesUrl).then(({ messages }) => {
         if (didCancel) return
 
@@ -74,8 +81,29 @@ function App() {
           isGettingResults: false
         })
       })
+
+      // intervalId = setInterval(
+      //   () => {
+      //     // if (state.queries.length === 0 || state.isGettingResults) return
+      //     // dispatch({ isGettingResults: true })
+      //     // if (state.queries.length === 0) return
+      //     console.log("Fetching results")
+      //     safeFetch(messagesUrl).then(({ messages }) => {
+      //       if (didCancel) return
+    
+      //       dispatch({
+      //         results: messages,
+      //         isGettingResults: false
+      //       })
+      //     })
+      //   },
+      //   20000
+      // )
     }
-      
+    
+    // if (!state.queries.length) {
+    //   clearInterval(intervalId)
+    // }
 
     if (state.isGettingSuggestions) {
       const symbolsUrl = `${BASE_URL}/symbols?q=${/\w/.test(state.queryInput) ? encodeURIComponent(state.queryInput) : 'a'}` 
@@ -91,9 +119,25 @@ function App() {
     }
 
     return () => {
+      // clearInterval(intervalId)
       didCancel = true
     }
   }, [state])
+
+  React.useEffect(() => {
+    if (queries.length === 0) return
+
+    const timeoutId = setTimeout(
+      () => {
+        dispatch({ isGettingResults: true })
+      },
+      20000
+    )
+
+    return () => {
+      clearTimeout(timeoutId)
+    }
+  })
 
   // console.log(state)
 
