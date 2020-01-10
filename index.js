@@ -210,11 +210,11 @@ function App() {
             ?
             fragment(
               null,
-              li({ className: 'h-20 skeleton' }, null),
-              li({ className: 'h-20 skeleton' }, null),
-              li({ className: 'h-20 skeleton' }, null),
-              li({ className: 'h-20 skeleton' }, null),
-              li({ className: 'h-20 skeleton' }, null),
+              li({ className: 'h-16 skeleton' }, null),
+              li({ className: 'h-16 skeleton' }, null),
+              li({ className: 'h-16 skeleton' }, null),
+              li({ className: 'h-16 skeleton' }, null),
+              li({ className: 'h-16 skeleton' }, null),
             )
             
             :
