@@ -173,13 +173,13 @@ function App() {
       },
       header({ className: 'bg-gray-100 p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-20 flex flex-col items-start' },
         form({
-          className: 'border-2 border-solid border-blue-600 relative shadow-inner pl-10 pr-4 py-2 mb-2 rounded-xl w-full',
+          className: 'bg-gray-200 relative shadow-inner pl-10 pr-4 py-2 mb-2 rounded-xl w-full',
           onClick: event => event.stopPropagation(),
           onSubmit: event => {
             event.preventDefault()
           }
         },
-          i({ className: 'text-blue-600 fas fa-search absolute left-0 top-0 mt-3 ml-4' }, null),
+          i({ className: 'fas fa-search absolute left-0 top-0 mt-3 ml-4' }, null),
           input({
             className: 'outline-none bg-transparent w-full',
             id: 'search',
@@ -297,7 +297,7 @@ function App() {
                 b({ className: 'ml-2' }, user.username)
               ),
                 blockquote({ className: 'mb-2 break-words' }, body),
-                em(null, new Date(created_at).toDateString())
+                em(null, new Date(created_at).toUTCString())
               )
             )
           )
