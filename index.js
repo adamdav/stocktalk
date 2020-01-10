@@ -166,7 +166,7 @@ function App() {
             event.preventDefault()
           }
         },
-          i({ className: 'fas fa-search fa-xs absolute left-0 top-0 mt-3 ml-4' }, null),
+          i({ className: 'fas fa-search absolute left-0 top-0 mt-2 ml-4' }, null),
           input({
             className: 'outline-none bg-transparent w-full',
             id: 'search',
@@ -205,7 +205,7 @@ function App() {
             },
           },
           null),
-          ul({ id: 'suggestions', className: `absolute left-0 overflow-hidden rounded-xl shadow-lg bg-white w-full ${showSuggestions ? '' : 'hidden'}` },
+          ul({ id: 'suggestions', className: `absolute left-0 top-0 mt-10 overflow-hidden rounded-xl shadow-lg bg-white w-full ${showSuggestions ? '' : 'hidden'}` },
             isGettingSuggestions
             ?
             fragment(
@@ -222,7 +222,7 @@ function App() {
               li(
                 { key: id },
                 button({
-                  className: `p-4 w-full text-left cursor-pointer hover:shadow-inner ${i === suggestionIndex ? 'bg-gray-200' : ''}`,
+                  className: `px-4 py-2 w-full text-left cursor-pointer hover:shadow-inner ${i === suggestionIndex ? 'bg-gray-200' : ''}`,
                   onMouseEnter: () => {
                     dispatch({
                       suggestionIndex: i
