@@ -154,10 +154,10 @@ function App() {
         onClick: event => dispatch({ showSuggestions: false })
       },
       header(
-        { className: 'border-t-4 border-solid border-blue-600 bg-gray-100 p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-20 flex flex-col items-start' },
+        { className: 'border-t-4 border-solid border-blue-600 bg-gray-100 p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-20 flex flex-col items-center' },
         div(
           {
-            className: 'relative w-full',
+            className: 'relative w-full max-w-3xl',
             onClick: event => event.stopPropagation()
           },
           i({ className: 'fas fa-search absolute left-0 top-0 mt-3 ml-4' }, null),
@@ -243,37 +243,37 @@ function App() {
               )
             )
           ),
-        ),
-        ul(
-          { className: 'inline-flex' },
-          queries.map((q) =>
-            li(
-              {
-                key: q,
-                className: 'px-2 py-1 mr-2 rounded-xl bg-blue-600 text-blue-100 lightest-blue text-sm'
-              },
-              span(null, q),
-              button(
+          ul(
+            { className: 'flex w-full max-w-3xl' },
+            queries.map((q) =>
+              li(
                 {
-                  onClick: _ =>
-                    dispatch({
-                      queries: queries.filter(q2 => q2 !== q),
-                      isGettingResults: true
-                    })
+                  key: q,
+                  className: 'px-2 py-1 mr-2 rounded-xl bg-blue-600 text-blue-100 lightest-blue text-sm'
                 },
-                i(
-                  { className: 'fas fa-times-circle ml-1 hover:opacity-50' },
-                  null
+                span(null, q),
+                button(
+                  {
+                    onClick: _ =>
+                      dispatch({
+                        queries: queries.filter(q2 => q2 !== q),
+                        isGettingResults: true
+                      })
+                  },
+                  i(
+                    { className: 'fas fa-times-circle ml-1 hover:opacity-50' },
+                    null
+                  )
                 )
               )
-            )
-          ),
-        )
+            ),
+          )
+        ),
       ),
-      main({ className: `px-4 pt-32 pb-16 min-h-screen ${isGettingResults ? 'shimmer' : ''}` },
+      main({ className: `px-4 pt-32 pb-16 min-h-screen flex justify-center ${isGettingResults ? 'shimmer' : ''}` },
         ul(null,
           results.map(({ id, user, body, created_at }) =>
-            li({ key: id, className: 'bg-gray-100 rounded-xl p-4 mb-6 flex flex-col relative z-10 shadow' },
+            li({ key: id, className: 'max-w-3xl bg-gray-100 rounded-xl p-4 mb-6 flex flex-col relative z-10 shadow' },
               span(
                 { className: 'inline-flex items-center mb-2' },
                 img(
