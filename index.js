@@ -142,7 +142,7 @@ function App() {
   
   if (showSplash) {
     return div(
-      { className: 'h-screen flex flex-col justify-center items-center shimmer-splash z-0' },
+      { className: 'h-screen flex flex-col justify-center items-center shimmer-blue z-0' },
       a({ className: 'inline-flex items-center text-display text-gray-100 text-5xl mb-8 z-0' },
         i({ className: 'fas fa-comment-dollar' }, null),
         span({ className: 'ml-1' }, 'stocktalk'),
@@ -172,13 +172,13 @@ function App() {
       },
       header({ className: 'bg-gray-100 p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-20 flex flex-col items-start' },
         form({
-          className: 'bg-gray-400 relative text-black shadow-inner pl-10 pr-4 py-1 mb-2 rounded-xl w-full',
+          className: 'border-2 border-solid border-blue-600 relative shadow-inner pl-10 pr-4 py-2 mb-2 rounded-xl w-full',
           onClick: event => event.stopPropagation(),
           onSubmit: event => {
             event.preventDefault()
           }
         },
-          i({ className: 'fas fa-search absolute left-0 top-0 mt-2 ml-4' }, null),
+          i({ className: 'text-blue-600 fas fa-search absolute left-0 top-0 mt-3 ml-4' }, null),
           input({
             className: 'outline-none bg-transparent w-full',
             id: 'search',
@@ -217,7 +217,7 @@ function App() {
             },
           },
           null),
-          ul({ id: 'suggestions', className: `absolute left-0 top-0 mt-10 overflow-hidden rounded-xl shadow-lg bg-white w-full ${showSuggestions ? '' : 'hidden'}` },
+          ul({ id: 'suggestions', className: `absolute left-0 top-0 mt-12 overflow-hidden rounded-xl shadow-lg bg-gray-100 w-full ${showSuggestions ? '' : 'hidden'}` },
             isGettingSuggestions
             ?
             fragment(
@@ -234,7 +234,7 @@ function App() {
               li(
                 { key: id },
                 button({
-                  className: `px-4 py-2 w-full text-left cursor-pointer hover:shadow-inner ${i === suggestionIndex ? 'bg-gray-200' : ''}`,
+                  className: `px-4 py-2 w-full text-left cursor-pointer hover:text-blue-600 ${i === suggestionIndex ? 'bg-gray-200' : ''}`,
                   onMouseEnter: () => {
                     dispatch({
                       suggestionIndex: i
@@ -267,7 +267,7 @@ function App() {
           ...queries.map((q) =>
             li({
               key: q,
-              className: 'px-2 py-1 mr-2 rounded-xl bg-blue-600 text-gray-400 lightest-blue text-sm'
+              className: 'px-2 py-1 mr-2 rounded-xl bg-blue-600 text-blue-100 lightest-blue text-sm'
             },
             span(null, q),
             button(
@@ -278,7 +278,7 @@ function App() {
                     isGettingResults: true
                   })
               },
-              i({ className: 'fas fa-times-circle ml-1 hover:text-gray-100' }, null)
+              i({ className: 'fas fa-times-circle ml-1 hover:opacity-50' }, null)
             ))
           ),
         )
@@ -286,7 +286,7 @@ function App() {
       main({ className: `px-4 pt-32 pb-16 min-h-screen ${isGettingResults ? 'shimmer' : ''}` },
         ul(null,
           results.map(({ id, user, body, created_at }) =>
-            li({ key: id, className: 'bg-white rounded-xl p-4 mb-6 flex flex-col relative z-10 shadow' },
+            li({ key: id, className: 'bg-gray-100 rounded-xl p-4 mb-6 flex flex-col relative z-10 shadow' },
               span({ className: 'inline-flex items-center mb-2' },
                 img({ className: 'border-solid border border-gray-200 rounded-full h-12 w-12', src: user.avatar_url }, null),
                 b({ className: 'mx-1' }, user.username)),
@@ -296,12 +296,12 @@ function App() {
       footer(
         { className: 'p-4 fixed bottom-0 z-0 w-full flex justify-center' },
         span(
-          { className: `inline-flex items-baseline text-black opacity-50` },
+          { className: 'inline-flex items-baseline text-gray-600 z-10' },
           "Powered by",
           a(
             { className: 'ml-2', href: 'https://stocktwits.com/' },
             img(
-              { className: 'h-5 grayscale', src: stocktwits, alt: 'Stocktwits' },
+              { className: 'h-5 grayscale opacity-75', src: stocktwits, alt: 'Stocktwits' },
               null
             )
           )
