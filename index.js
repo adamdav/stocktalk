@@ -154,7 +154,7 @@ function App() {
         onClick: event => dispatch({ showSuggestions: false })
       },
       header(
-        { className: 'bg-gray-100 p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-20 flex flex-col items-start' },
+        { className: 'border-t-4 border-solid border-blue-600 bg-gray-100 p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-20 flex flex-col items-start' },
         div(
           {
             className: 'relative w-full',
@@ -163,7 +163,7 @@ function App() {
           i({ className: 'fas fa-search absolute left-0 top-0 mt-3 ml-4' }, null),
           input(
             {
-              className: `border-1 border-2 border-blue-600 outline-none pl-10 pr-4 py-2 mb-2 w-full rounded-t-xl rounded-b-xl ${showSuggestions ? 'rounded-b-none shadow-lg bg-gray-100' : 'shadow-inner bg-gray-200 hover:bg-gray-100 hover:shadow-lg' }`,
+              className: `outline-none pl-10 pr-4 py-2 mb-2 w-full rounded-t-xl rounded-b-xl ${showSuggestions ? 'rounded-b-none shadow-md bg-gray-100' : 'shadow-inner bg-gray-200 hover:bg-gray-100 hover:shadow-lg' }`,
               id: 'search',
               name: 'search',
               type: 'text',
@@ -200,7 +200,7 @@ function App() {
             null
           ),
           ul(
-            { id: 'suggestions', className: `border-l-2 border-r-2 border-b-2 border-solid border-blue-600 absolute left-0 top-0 mt-10 overflow-hidden rounded-b-xl shadow-lg bg-gray-100 w-full ${showSuggestions ? '' : 'hidden'}` },
+            { id: 'suggestions', className: `absolute left-0 top-0 mt-10 overflow-hidden rounded-b-xl shadow-md bg-gray-100 w-full ${showSuggestions ? '' : 'hidden'}` },
             isGettingSuggestions
             ?
             fragment(
