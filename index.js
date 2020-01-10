@@ -271,7 +271,7 @@ function App() {
         ),
       ),
       main({ className: `px-4 pt-32 pb-16 min-h-screen flex justify-center ${isGettingResults ? 'shimmer' : ''}` },
-        ul(null,
+        ul({ className: 'max-w-full'},
           results.map(({ id, user, body, created_at }) =>
             li({ key: id, className: 'max-w-3xl bg-gray-100 rounded-xl p-4 mb-6 flex flex-col relative z-10 shadow' },
               span(
