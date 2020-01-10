@@ -28,6 +28,18 @@ const option = el('option')
 const span = el('span')
 const ul = el('ul')
 
+// const stocktwitsAttribution = ({ color = 'gray-500'}) => span(
+//   { className: `inline-flex items-baseline text-${color}` },
+//   "Powered by",
+//   a(
+//     { className: 'ml-2', href: 'https://stocktwits.com/' },
+//     img(
+//       { className: 'h-5 grayscale opacity-75', src: stocktwits, alt: 'Stocktwits' },
+//       null
+//     )
+//   )
+// )
+
 function App() {
   const safeFetch = throttle(
     async function(url) {
@@ -53,21 +65,23 @@ function App() {
       queryInput: '',
       queries: [],
       results: [],
+      showSplash: true,
       showSuggestions: false,
       suggestions: [],
       suggestionIndex: 0
     }
   )
 
-  // Run on first render only
-  // React.useEffect(() => {
-  //   console.log(state)
+  React.useEffect(() => {
+    const timeoutId = setTimeout(() => dispatch({ showSplash: false }), 3000)
 
-  // }, [])
+    return () => {
+      clearTimeout(timeoutId)
+    }
+  })
 
   React.useEffect(() => {
     let didCancel = false
-    // let intervalId
 
     if (state.isGettingResults) {
       if (state.queries.length === 0) {
@@ -86,29 +100,7 @@ function App() {
           isGettingResults: false
         })
       })
-
-      // intervalId = setInterval(
-      //   () => {
-      //     // if (state.queries.length === 0 || state.isGettingResults) return
-      //     // dispatch({ isGettingResults: true })
-      //     // if (state.queries.length === 0) return
-      //     console.log("Fetching results")
-      //     safeFetch(messagesUrl).then(({ messages }) => {
-      //       if (didCancel) return
-    
-      //       dispatch({
-      //         results: messages,
-      //         isGettingResults: false
-      //       })
-      //     })
-      //   },
-      //   20000
-      // )
     }
-    
-    // if (!state.queries.length) {
-    //   clearInterval(intervalId)
-    // }
 
     if (state.isGettingSuggestions) {
       const symbolsUrl = `${BASE_URL}/symbols?q=${/\w/.test(state.queryInput) ? encodeURIComponent(state.queryInput) : 'a'}` 
@@ -146,8 +138,29 @@ function App() {
 
   // console.log(state)
 
-  const { isGettingResults = false, isGettingSuggestions = false, queryInput = '', queries = [], results = [], showSuggestions = false, suggestions = [], suggestionIndex = 0 } = state
-
+  const { isGettingResults = false, isGettingSuggestions = false, queryInput = '', queries = [], results = [], showSplash = true, showSuggestions = false, suggestions = [], suggestionIndex = 0 } = state
+  
+  if (showSplash) {
+    return div(
+      { className: 'h-screen flex flex-col justify-center items-center shimmer-splash z-0' },
+      a({ className: 'inline-flex items-center text-5xl text-blue-200 mb-4 z-10' },
+        i({ className: 'fas fa-comment-dollar' }, null),
+        span({ className: 'ml-1' }, 'stocktalk'),
+      ),
+      span(
+        { className: 'inline-flex items-baseline text-blue-400 z-10' },
+        "Powered by",
+        a(
+          { className: 'ml-2', href: 'https://stocktwits.com/' },
+          img(
+            { className: 'h-5 grayscale opacity-75', src: stocktwits, alt: 'Stocktwits' },
+            null
+          )
+        )
+      )
+    )
+  }
+  
   return (
     div(
       { 
@@ -155,10 +168,6 @@ function App() {
         onClick: event => dispatch({ showSuggestions: false })
       },
       header({ className: 'bg-white p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-20 flex flex-col items-start' },
-        // a({ className: 'inline-flex items-center' },
-        //   i({ className: 'fas fa-comment-dollar fa-lg text-blue-500' }, null),
-        //   span({ className: 'text-lg ml-1' }, 'stocktalk'),
-        // ),
         form({
           className: 'relative bg-gray-200 shadow-inner pl-10 pr-4 py-1 mb-2 rounded-xl w-full',
           onClick: event => event.stopPropagation(),
@@ -210,11 +219,11 @@ function App() {
             ?
             fragment(
               null,
-              li({ className: 'h-16 skeleton' }, null),
-              li({ className: 'h-16 skeleton' }, null),
-              li({ className: 'h-16 skeleton' }, null),
-              li({ className: 'h-16 skeleton' }, null),
-              li({ className: 'h-16 skeleton' }, null),
+              li({ className: 'h-16 shimmer' }, null),
+              li({ className: 'h-16 shimmer' }, null),
+              li({ className: 'h-16 shimmer' }, null),
+              li({ className: 'h-16 shimmer' }, null),
+              li({ className: 'h-16 shimmer' }, null),
             )
             
             :
@@ -271,7 +280,7 @@ function App() {
           ),
         )
       ),
-      main({ className: `px-4 pt-32 pb-16 min-h-screen ${isGettingResults ? 'skeleton' : ''}` },
+      main({ className: `px-4 pt-32 pb-16 min-h-screen ${isGettingResults ? 'shimmer' : ''}` },
         ul(null,
           results.map(({ id, user, body, created_at }) =>
             li({ key: id, className: 'bg-white rounded-xl p-4 mb-6 flex flex-col relative z-10 shadow' },
@@ -281,10 +290,19 @@ function App() {
               blockquote({ className: 'mb-2 break-words' }, body),
               created_at)))
       ),
-      footer({ className: 'text-gray-500 p-4 fixed bottom-0 z-0 w-full flex justify-center items-baseline' },
-        "Powered by",
-        a({ className: 'ml-2', href: 'https://stocktwits.com/' },
-          img({ className: 'h-5 grayscale', src: stocktwits, alt: 'Stocktwits' }, null))
+      footer(
+        { className: 'p-4 fixed bottom-0 z-0 w-full flex justify-center' },
+        span(
+          { className: `inline-flex items-baseline text-gray-500` },
+          "Powered by",
+          a(
+            { className: 'ml-2', href: 'https://stocktwits.com/' },
+            img(
+              { className: 'h-5 grayscale opacity-75', src: stocktwits, alt: 'Stocktwits' },
+              null
+            )
+          )
+        )
       )
     )
   )

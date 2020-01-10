@@ -12,13 +12,14 @@
         filter: grayscale(100%);
       }
 
-      .skeleton {
+      .shimmer {
         position: relative;
         overflow: hidden;
-        background-color: #e2e8f0;
+        /* background-color: #e2e8f0; */
+        background-color: #4299e1;
       }
 
-      .skeleton::after {
+      .shimmer::after {
         position: absolute;
         top: 0;
         right: 0;
@@ -32,7 +33,46 @@
           rgba(255, 255, 255, 0.5) 60%,
           rgba(255, 255, 255, 0)
         );
-        animation: shimmer 1s infinite;
+        /* background-image: linear-gradient(
+          90deg,
+          rgba(99, 180, 237, 0) 0,
+          rgba(99, 180, 237, 0.2) 20%,
+          rgba(99, 180, 237, 0.5) 60%,
+          rgba(99, 180, 237, 0)
+        ); */
+        animation: shimmer 2s infinite;
+        content: '';
+      }
+
+      .shimmer-splash {
+        position: relative;
+        overflow: hidden;
+        background-color: #3182ce;
+        /* background-color: #4299e1; */
+      }
+
+      .shimmer-splash::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        transform: translateX(-100%);
+        /* background-image: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0) 0,
+          rgba(255, 255, 255, 0.2) 20%,
+          rgba(255, 255, 255, 0.5) 60%,
+          rgba(255, 255, 255, 0)
+        ); */
+        background-image: linear-gradient(
+          90deg,
+          rgba(66, 153, 225, 0) 0,
+          rgba(66, 153, 225, 0.2) 20%,
+          rgba(66, 153, 225, 0.5) 60%,
+          rgba(66, 153, 225, 0)
+        );
+        animation: shimmer 2s infinite;
         content: '';
       }
 
