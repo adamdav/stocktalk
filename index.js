@@ -151,7 +151,7 @@ function App() {
   return (
     div(
       { 
-        className: `text-gray-700 h-auto flex flex-col justify-between pt-24 pb-12 ${isGettingResults ? 'skeleton' : ''}`,
+        className: 'text-gray-700 flex flex-col justify-between',
         onClick: event => dispatch({ showSuggestions: false })
       },
       header({ className: 'bg-white p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-20 flex flex-col items-start' },
@@ -271,7 +271,7 @@ function App() {
           ),
         )
       ),
-      main({ className: 'px-4' },
+      main({ className: `px-4 pt-32 pb-16 min-h-screen ${isGettingResults ? 'skeleton' : ''}` },
         ul(null,
           results.map(({ id, user, body, created_at }) =>
             li({ key: id, className: 'bg-white rounded-xl p-4 mb-6 flex flex-col relative z-10 shadow' },
