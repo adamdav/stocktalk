@@ -13,33 +13,18 @@ const b = el('b')
 const blockquote = el('blockquote')
 const br = el('br')
 const button = el('button')
-const datalist = el('datalist')
 const div = el('div')
 const em = el('em')
-const form = el('form')
 const footer = el('footer')
-const fragment = el(React.Fragment, null)
+const fragment = el(React.Fragment)
 const header = el('header')
 const i = el('i')
 const img = el('img')
 const input = el('input')
 const li = el('li')
 const main = el('main')
-const option = el('option')
 const span = el('span')
 const ul = el('ul')
-
-// const stocktwitsAttribution = ({ color = 'gray-500'}) => span(
-//   { className: `inline-flex items-baseline text-${color}` },
-//   "Powered by",
-//   a(
-//     { className: 'ml-2', href: 'https://stocktwits.com/' },
-//     img(
-//       { className: 'h-5 grayscale opacity-75', src: stocktwits, alt: 'Stocktwits' },
-//       null
-//     )
-//   )
-// )
 
 function App() {
   const safeFetch = throttle(
@@ -117,7 +102,6 @@ function App() {
     }
 
     return () => {
-      // clearInterval(intervalId)
       didCancel = true
     }
   }, [state])
@@ -136,8 +120,6 @@ function App() {
       clearTimeout(timeoutId)
     }
   })
-
-  // console.log(state)
 
   const { isGettingResults = false, isGettingSuggestions = false, queryInput = '', queries = [], results = [], showSplash = true, showSuggestions = false, suggestions = [], suggestionIndex = 0 } = state
   
@@ -171,54 +153,54 @@ function App() {
         className: 'text-gray-700 flex flex-col justify-between',
         onClick: event => dispatch({ showSuggestions: false })
       },
-      header({ className: 'bg-gray-100 p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-20 flex flex-col items-start' },
-        form({
-          className: 'bg-gray-200 relative shadow-inner pl-10 pr-4 py-2 mb-2 rounded-xl w-full',
-          onClick: event => event.stopPropagation(),
-          onSubmit: event => {
-            event.preventDefault()
-          }
-        },
-          i({ className: 'fas fa-search absolute left-0 top-0 mt-3 ml-4' }, null),
-          input({
-            className: 'outline-none bg-transparent w-full',
-            id: 'search',
-            name: 'search',
-            list: 'suggestions',
-            // placeholder: 'Search stocks and cryptos',
-            value: queryInput,
-            onKeyDown: event => {
-              switch (event.key) {
-                case 'ArrowUp':
-                  if (suggestionIndex > 0) dispatch({ suggestionIndex: suggestionIndex - 1 })
-                  break
-                case 'ArrowDown':
-                  if (suggestionIndex < 4) dispatch({ suggestionIndex: suggestionIndex + 1 })
-                  break
-                case 'Enter':
-                  dispatch({
-                    queryInput: '',
-                    queries: [...new Set([...queries, suggestions[suggestionIndex].symbol])],
-                    suggestionIndex: 0,
-                    isGettingResults: true,
-                    showSuggestions: false
-                  })
-                default:
-                  return
-              }
-            },
-            onFocus: event => {
-              dispatch({ showSuggestions: true, isGettingSuggestions: true })
-            },
-            // onBlur: event => {
-            //   dispatch({ showSuggestions: false })
-            // },
-            onChange: event => {
-              dispatch({ queryInput: event.target.value, isGettingSuggestions: true })
-            },
+      header(
+        { className: 'bg-gray-100 p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-20 flex flex-col items-start' },
+        div(
+          {
+            className: 'relative w-full',
+            onClick: event => event.stopPropagation()
           },
-          null),
-          ul({ id: 'suggestions', className: `absolute left-0 top-0 mt-12 overflow-hidden rounded-xl shadow-lg bg-gray-100 w-full ${showSuggestions ? '' : 'hidden'}` },
+          i({ className: 'fas fa-search absolute left-0 top-0 mt-3 ml-4' }, null),
+          input(
+            {
+              className: 'bg-gray-200 outline-none shadow-inner hover:shadow hover:bg-gray-100 focus:shadow focus:bg-gray-100 pl-10 pr-4 py-2 mb-2 rounded-xl w-full',
+              id: 'search',
+              name: 'search',
+              type: 'text',
+              placeholder: 'Search stocks and cryptos',
+              value: queryInput,
+              onKeyDown: event => {
+                switch (event.key) {
+                  case 'ArrowUp':
+                    if (suggestionIndex > 0) dispatch({ suggestionIndex: suggestionIndex - 1 })
+                    break
+                  case 'ArrowDown':
+                    if (suggestionIndex < 4) dispatch({ suggestionIndex: suggestionIndex + 1 })
+                    break
+                  case 'Enter':
+                    dispatch({
+                      queryInput: '',
+                      queries: [...new Set([...queries, suggestions[suggestionIndex].symbol])],
+                      suggestionIndex: 0,
+                      isGettingResults: true,
+                      showSuggestions: false
+                    })
+                    break
+                  default:
+                    return
+                }
+              },
+              onFocus: _ => {
+                dispatch({ showSuggestions: true, isGettingSuggestions: true })
+              },
+              onChange: event => {
+                dispatch({ queryInput: event.target.value, isGettingSuggestions: true })
+              },
+            },
+            null
+          ),
+          ul(
+            { id: 'suggestions', className: `absolute left-0 top-0 mt-12 overflow-hidden rounded-xl shadow-lg bg-gray-100 w-full ${showSuggestions ? '' : 'hidden'}` },
             isGettingSuggestions
             ?
             fragment(
@@ -229,32 +211,31 @@ function App() {
               li({ className: 'h-16 shimmer' }, null),
               li({ className: 'h-16 shimmer' }, null),
             )
-            
             :
             suggestions.slice(0,5).map(({ id, title, symbol }, i) =>
               li(
                 { key: id },
-                button({
-                  className: `px-4 py-2 w-full text-left cursor-pointer hover:text-blue-600 ${i === suggestionIndex ? 'bg-gray-200' : ''}`,
-                  onMouseEnter: () => {
-                    dispatch({
-                      suggestionIndex: i
-                    })
-                  },
-                  onClick: (event) => {
-                    event.stopPropagation()
-                    const data = {
-                      queryInput: '',
-                      queries: [...new Set([...queries, symbol])],
-                      suggestionIndex: 0,
-                      isGettingResults: true,
-                      showSuggestions: false
-                    }
+                button(
+                  {
+                    className: `px-4 py-2 w-full text-left cursor-pointer hover:text-blue-600 ${i === suggestionIndex ? 'bg-gray-200' : ''}`,
+                    onMouseEnter: () => {
+                      dispatch({
+                        suggestionIndex: i
+                      })
+                    },
+                    onClick: (event) => {
+                      event.stopPropagation()
+                      const data = {
+                        queryInput: '',
+                        queries: [...new Set([...queries, symbol])],
+                        suggestionIndex: 0,
+                        isGettingResults: true,
+                        showSuggestions: false
+                      }
 
-                    console.log(data)
-                    dispatch(data)
-                  }
-                },
+                      dispatch(data)
+                    }
+                  },
                   b(null, symbol),
                   br(null, null),
                   title
@@ -265,22 +246,27 @@ function App() {
         ),
         ul(
           { className: 'inline-flex' },
-          ...queries.map((q) =>
-            li({
-              key: q,
-              className: 'px-2 py-1 mr-2 rounded-xl bg-blue-600 text-blue-100 lightest-blue text-sm'
-            },
-            span(null, q),
-            button(
+          queries.map((q) =>
+            li(
               {
-                onClick: _ =>
-                  dispatch({
-                    queries: queries.filter(q2 => q2 !== q),
-                    isGettingResults: true
-                  })
+                key: q,
+                className: 'px-2 py-1 mr-2 rounded-xl bg-blue-600 text-blue-100 lightest-blue text-sm'
               },
-              i({ className: 'fas fa-times-circle ml-1 hover:opacity-50' }, null)
-            ))
+              span(null, q),
+              button(
+                {
+                  onClick: _ =>
+                    dispatch({
+                      queries: queries.filter(q2 => q2 !== q),
+                      isGettingResults: true
+                    })
+                },
+                i(
+                  { className: 'fas fa-times-circle ml-1 hover:opacity-50' },
+                  null
+                )
+              )
+            )
           ),
         )
       ),
