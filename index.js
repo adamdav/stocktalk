@@ -15,6 +15,7 @@ const br = el('br')
 const button = el('button')
 const datalist = el('datalist')
 const div = el('div')
+const em = el('em')
 const form = el('form')
 const footer = el('footer')
 const fragment = el(React.Fragment, null)
@@ -287,11 +288,19 @@ function App() {
         ul(null,
           results.map(({ id, user, body, created_at }) =>
             li({ key: id, className: 'bg-gray-100 rounded-xl p-4 mb-6 flex flex-col relative z-10 shadow' },
-              span({ className: 'inline-flex items-center mb-2' },
-                img({ className: 'border-solid border border-gray-200 rounded-full h-12 w-12', src: user.avatar_url }, null),
-                b({ className: 'mx-1' }, user.username)),
-              blockquote({ className: 'mb-2 break-words' }, body),
-              created_at)))
+              span(
+                { className: 'inline-flex items-center mb-2' },
+                img(
+                  { className: 'border-solid border border-gray-200 rounded-full h-12 w-12', src: user.avatar_url },
+                  null
+                ),
+                b({ className: 'ml-2' }, user.username)
+              ),
+                blockquote({ className: 'mb-2 break-words' }, body),
+                em(null, new Date(created_at).toDateString())
+              )
+            )
+          )
       ),
       footer(
         { className: 'p-4 fixed bottom-0 z-0 w-full flex justify-center' },
