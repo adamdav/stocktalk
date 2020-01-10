@@ -3,9 +3,6 @@
 const https = require('https')
 
 module.exports.messages = async event => {
-  // const { multiValueQueryStringParameters = { q: [] } } = JSON.parse(event)
-  // console.log(event)
-
   try {
     const responses = (await Promise.all(
         event
@@ -24,25 +21,13 @@ module.exports.messages = async event => {
                   .on('error', reject)
               })
 
-              // JSON.parse(response)
-
-              // console.log(messages)
               return messages
-              // const { messages } = await fetch(`https://api.stocktwits.com/api/2/search/symbols.json?q=${encodeURIComponent(q)}`)
-              // return response
-            // } catch (error) {
-              // console.error(error)
-              // return '{}'
-            // }
           })
       )
     )
 
-    // console.log(responses)
-
     const messages = responses.reduce((a, b) => [...a, ...b], [])
     const uniqueMessageIds = [...new Set(messages.map(({ id }) => id))]
-    console.log(uniqueMessageIds)
     const uniqueMessages = uniqueMessageIds.map(id => messages.find(message => message.id === id))
 
     const sortedMessages =
@@ -51,16 +36,6 @@ module.exports.messages = async event => {
           new Date(message2.created_at) - new Date(message1.created_at)
         )
 
-    // console.log(sortedMessages)
-
-    // const messages = [
-    //   ...new Set(
-    //     responses
-    //       .reduce((a, b) => [...a, ...b], [])
-    //       .map(({ id }) => id)
-    //   )
-    // ].map()
-
     return {
       statusCode: 200,
       headers: {
@@ -68,7 +43,7 @@ module.exports.messages = async event => {
         'Access-Control-Allow-Credentials': true,
       },
       body: JSON.stringify(
-        { messages },
+        { messages: sortedMessages },
         null,
         2
       ),
