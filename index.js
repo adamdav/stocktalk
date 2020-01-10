@@ -255,9 +255,9 @@ function App() {
           ...queries.map((q) =>
             li({
               key: q,
-              className: 'px-2 py-1 mr-2 bg-blue-500 rounded-xl text-blue-200'
+              className: 'px-2 py-1 mr-2 bg-blue-500 rounded-xl text-blue-200 text-sm'
             },
-            q,
+            span(null, q),
             button(
               {
                 onClick: _ =>
@@ -266,7 +266,7 @@ function App() {
                     isGettingResults: true
                   })
               },
-              i({ className: 'fas fa-times fa-sm p-1' }, null)
+              i({ className: 'fas fa-times-circle ml-1 hover:text-white' }, null)
             ))
           ),
         )
