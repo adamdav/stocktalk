@@ -70,9 +70,6 @@ module.exports.messages = async event => {
 };
 
 module.exports.symbols = async event => {
-  // const { multiValueQueryStringParameters = { q: [] } } = JSON.parse(event)
-  console.log(event)
-
   const q = event.multiValueQueryStringParameters.q[0]
   
   try {
@@ -87,8 +84,6 @@ module.exports.symbols = async event => {
         .on('error', reject)
     })
 
-    console.log(response)
-
     return {
       statusCode: 200,
       headers: {
@@ -101,8 +96,6 @@ module.exports.symbols = async event => {
         2
       ),
     };
-    // const { messages } = await fetch(`https://api.stocktwits.com/api/2/search/symbols.json?q=${encodeURIComponent(q)}`)
-    // return response
   } catch (error) {
     console.error(error)
     return {
@@ -119,37 +112,7 @@ module.exports.symbols = async event => {
     };
   }
 
-  // console.log(response)
-
-  // const messages = responses.reduce((a, b) => [...a, ...b], [])
-
-
 
   // Use this code if you don't use the http event with the LAMBDA-PROXY integration
   // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };
-
-// module.exports.symbols = async event => {
-//   try {
-//     const { messages } = await new Promise((resolve, reject) => {
-//       const chunks = []
-
-//       https
-//         .get(`https://api.stocktwits.com/api/2/search/symbols.json?q=${encodeURIComponent(q)}.json`, response => {
-//           response.on('data', chunk => chunks.push(chunk))
-//           response.on('end', () => resolve(JSON.parse(Buffer.concat(chunks).toString('utf8'))))
-//         })
-//         .on('error', reject)
-//     })
-
-//     // JSON.parse(response)
-
-//     console.log(messages)
-//     return messages
-//     // const { messages } = await fetch(`https://api.stocktwits.com/api/2/search/symbols.json?q=${encodeURIComponent(q)}`)
-//     // return response
-//   } catch (error) {
-//     console.error(error)
-//     return '{}'
-//   }
-// }
