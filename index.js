@@ -143,18 +143,21 @@ function App() {
   if (showSplash) {
     return div(
       { className: 'h-screen flex flex-col justify-center items-center shimmer-splash z-0' },
-      a({ className: 'inline-flex items-center text-5xl text-blue-200 mb-4 z-10' },
+      a({ className: 'inline-flex items-center text-display text-gray-100 text-5xl mb-8 z-0' },
         i({ className: 'fas fa-comment-dollar' }, null),
         span({ className: 'ml-1' }, 'stocktalk'),
       ),
-      span(
-        { className: 'inline-flex items-baseline text-blue-400 z-10' },
-        "Powered by",
-        a(
-          { className: 'ml-2', href: 'https://stocktwits.com/' },
-          img(
-            { className: 'h-5 grayscale opacity-75', src: stocktwits, alt: 'Stocktwits' },
-            null
+      footer(
+        { className: 'p-4 fixed bottom-0 z-0 w-full flex justify-center' },
+        span(
+          { className: 'inline-flex items-baseline text-gray-300 z-10' },
+          "Powered by",
+          a(
+            { className: 'ml-2', href: 'https://stocktwits.com/' },
+            img(
+              { className: 'h-5 grayscale-invert opacity-75', src: stocktwits, alt: 'Stocktwits' },
+              null
+            )
           )
         )
       )
@@ -167,9 +170,9 @@ function App() {
         className: 'text-gray-700 flex flex-col justify-between',
         onClick: event => dispatch({ showSuggestions: false })
       },
-      header({ className: 'bg-white p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-20 flex flex-col items-start' },
+      header({ className: 'bg-gray-100 p-4 shadow-md fixed left-0 top-0 right-0 opacity-100 z-20 flex flex-col items-start' },
         form({
-          className: 'relative bg-gray-200 shadow-inner pl-10 pr-4 py-1 mb-2 rounded-xl w-full',
+          className: 'bg-gray-400 relative text-black shadow-inner pl-10 pr-4 py-1 mb-2 rounded-xl w-full',
           onClick: event => event.stopPropagation(),
           onSubmit: event => {
             event.preventDefault()
@@ -264,7 +267,7 @@ function App() {
           ...queries.map((q) =>
             li({
               key: q,
-              className: 'px-2 py-1 mr-2 bg-blue-500 rounded-xl text-blue-200 text-sm'
+              className: 'px-2 py-1 mr-2 rounded-xl bg-blue-600 text-gray-400 lightest-blue text-sm'
             },
             span(null, q),
             button(
@@ -275,7 +278,7 @@ function App() {
                     isGettingResults: true
                   })
               },
-              i({ className: 'fas fa-times-circle ml-1 hover:text-white' }, null)
+              i({ className: 'fas fa-times-circle ml-1 hover:text-gray-100' }, null)
             ))
           ),
         )
@@ -293,12 +296,12 @@ function App() {
       footer(
         { className: 'p-4 fixed bottom-0 z-0 w-full flex justify-center' },
         span(
-          { className: `inline-flex items-baseline text-gray-500` },
+          { className: `inline-flex items-baseline text-black opacity-50` },
           "Powered by",
           a(
             { className: 'ml-2', href: 'https://stocktwits.com/' },
             img(
-              { className: 'h-5 grayscale opacity-75', src: stocktwits, alt: 'Stocktwits' },
+              { className: 'h-5 grayscale', src: stocktwits, alt: 'Stocktwits' },
               null
             )
           )
